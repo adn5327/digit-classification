@@ -4,20 +4,21 @@ import numpy as np
 class hold_matrix(object):
 
 
-
-	def increment_all(self, matrix):
-		for element in matrix:
-			element+=1
-
 	def create_matrix(self):
 		matrix = np.zeros((28,28), dtype=np.int)
-		self.increment_all(matrix)
 		return matrix
 
+	def smooth_numerators(self):
+		for matrix in self.matrices:
+			for element in matrix:
+				element+=1
+
+
 	def __init__(self):
-		
-		self.zero_matrix = self.create_matrix()
-		self.one_matrix = self.create_matrix()
+		self.count = 0
+		self.matrices = list()
+		self.matrices.append(self.create_matrix())
+		self.matrices.append(self.create_matrix())
 		# access elements by arr[row][column]
 		# self.two_matrix = np.zeros(28,28)
 	def __str__(self):
