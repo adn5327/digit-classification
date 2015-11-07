@@ -9,6 +9,7 @@ def train():
 
 
 	digit_matrices = infra.digit_list()
+	digit_matrices.count = len(representation)
 
 	for line in representation:
 		populate_category(line, digit_matrices, images)

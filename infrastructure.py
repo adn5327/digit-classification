@@ -29,6 +29,7 @@ class digit_list(object):
 	def __init__(self):
 
 		self.frequencies = list()
+		self.count = 0
 		for i in range(10):
 			self.frequencies.append(hold_matrix())
 
