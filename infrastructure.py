@@ -1,6 +1,16 @@
 import numpy as np
 
-
+'''
+	This class is a collection of row-accessed matricies 
+		of size: 28 x 28
+	This matrix is initialized to all 0's
+	A hold matrix has the following variables:
+		matricies - a list of 28 x 28 arrays
+			[0] -> zeros matrix (represents whitespace "pixel")
+			[1]	-> ones matrix (represents black/gray "pixel")
+		count - used with digit_list, keeps a count of how many
+			times a category has been accessed
+'''
 class hold_matrix(object):
 
 
@@ -23,7 +33,12 @@ class hold_matrix(object):
 		# self.two_matrix = np.zeros(28,28)
 	def __str__(self):
 		return 'this is a hold matrix'
-
+'''
+	This class creates 10 matricies - 1 for each digit category
+	Variables:
+				frequencies - list of hold_matricies, 1 for each 
+				category 0...9
+'''
 class digit_list(object):
 
 	def __init__(self):
