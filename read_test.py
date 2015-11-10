@@ -21,7 +21,6 @@ def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 
 	pclass = (count_for_class *1.0)/ digit_matrices.count
 	denominator = (smooth_factor * len(tr_mtrx) + count_for_class) * 1.0
-
 	cur_total = math.log(pclass)
 	for i in range(28):
 		for j in range(28):
