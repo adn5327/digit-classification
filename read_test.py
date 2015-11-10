@@ -10,8 +10,10 @@ def test(training_data = None):
 	images = open('digitdata/testimages', 'r')
 
 	count = 0
+	
+	
 	for line in representation:
-		generate_probability(line, training_data, images)
+		result = generate_probability(line, training_data, images)
 		if count == 30:
 			quit()
 		count+=1
@@ -33,7 +35,7 @@ def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 					# print stry
 					cur_total += math.log(idx_prob)
 					break
-	cur_total *= -1
+	# cur_total *= -1
 	return cur_total
 
 
@@ -52,7 +54,6 @@ def generate_probability(line, digit_matrices, images):
 				singular_image[i].append(1)
 			else:
 				singular_image[i].append(0);
-
 	probability_per_class = list()
 
 	for i in range(10):
