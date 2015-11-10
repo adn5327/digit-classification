@@ -6,6 +6,7 @@ import time
 correct_count = 0
 correct_per_class = list()
 num_per_class = list()
+confusion_matrix = np.zeros((10,10))
 
 '''
 	@Param	training_data	Digit-list object that holds frequencies
@@ -29,11 +30,25 @@ def test(training_data = None):
 	for line in representation:
 		generate_probability(line, training_data, images)
 		count+=1
+		# if count == 100:
+			# break
 
 	print (1.0 * correct_count) / count
 	for i in range(len(num_per_class)):
 		print (i, (1.0 * correct_per_class[i]) / (num_per_class[i]) , correct_per_class[i], num_per_class[i])
-
+	for i in range(len(confusion_matrix)):
+		cat_sum = 0
+		for j in range(len(confusion_matrix[0])):
+			cat_sum += confusion_matrix[i][j]
+		for j in range(len(confusion_matrix[0])):
+			confusion_matrix[i][j] = confusion_matrix[i][j] / cat_sum * 1.0
+	string = '\t0\t1\t2\t3\t4\t5\t6\t7\t8\t9\n'
+	for i in range(10):
+		string += str(i) + ':\t'
+		for j in range(10):
+			string += '{0:.2%}\t'.format(confusion_matrix[i][j])
+		string += '\n'
+	print string
 '''
 	@Param	digit_class 	integer index of the category we want
 			testing_matrix	28x28 matrix representation of an image
@@ -98,7 +113,9 @@ def generate_probability(line, digit_matrices, images):
 	global num_per_class
 	global correct_count
 	global correct_per_class
+	global confusion_matrix
 	num_per_class[digit_class] +=1
+	confusion_matrix[digit_class][max_index] += 1
 	if max_index == digit_class:
 		correct_count+=1
 		correct_per_class[max_index]+=1
