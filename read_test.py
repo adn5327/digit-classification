@@ -2,11 +2,17 @@ import infrastructure as infra
 import read_training as rtrain
 import numpy as np
 import math
-
+import time
 correct_count = 0
 correct_per_class = list()
 num_per_class = list()
 
+'''
+	@Param	training_data	Digit-list object that holds frequencies
+							for categories we are training our data on
+	This function categorizes 'images' based on training information 
+		provided
+'''
 def test(training_data = None):
 
 	for i in range(10):
@@ -27,6 +33,18 @@ def test(training_data = None):
 	print (1.0 * correct_count) / count
 	for i in range(len(num_per_class)):
 		print (i, (1.0 * correct_per_class[i]) / (num_per_class[i]) , correct_per_class[i], num_per_class[i])
+
+'''
+	@Param	digit_class 	integer index of the category we want
+			testing_matrix	28x28 matrix representation of an image
+							we want to categorize
+			digit_matricies	Digit-list object storing training data
+			smooth_factor	integer representing how much smoothing to include
+	@Return	cur_total 		Returns the probability testing_matrix is in digit_class
+
+	This function computes the probability a given image (in the form 
+		of a 28x28 test matrix) is in a certain category
+'''
 def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 
 	training_matrix_obj = digit_matrices.frequencies[digit_class]
@@ -48,9 +66,13 @@ def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 	# cur_total *= -1
 	return cur_total
 
-
-
-
+'''
+	@Param 	line 			string, this should correspond to a line in testlabels
+			digit_matricies	Digit-list storing training data
+			images 			file to read "images" from
+	This function reads in an image from the images file and computes probabilities
+		for all possible categories.	
+'''
 def generate_probability(line, digit_matrices, images):
 
 	str = ''
@@ -85,4 +107,6 @@ def generate_probability(line, digit_matrices, images):
 
 
 if __name__ == '__main__':
+	start = time.clock()
 	test(rtrain.train())
+	print time.clock() - start
