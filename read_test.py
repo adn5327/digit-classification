@@ -9,10 +9,12 @@ def test(training_data = None):
 	representation = labels.readlines()
 	images = open('digitdata/testimages', 'r')
 
+	count = 0
 	for line in representation:
 		generate_probability(line, training_data, images)
-		quit()
-
+		if count == 30:
+			quit()
+		count+=1
 def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 
 	training_matrix_obj = digit_matrices.frequencies[digit_class]
@@ -28,11 +30,11 @@ def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 				if testing_matrix[i][j] == length:
 					idx_prob = (tr_mtrx[length][i][j] + smooth_factor)/ denominator
 					stry = '' + str(math.log(idx_prob)) + ' ' + str(idx_prob)
-					print stry
+					# print stry
 					cur_total += math.log(idx_prob)
 					break
-	print cur_total
-	quit()
+	cur_total *= -1
+	return cur_total
 
 
 
@@ -54,7 +56,12 @@ def generate_probability(line, digit_matrices, images):
 	probability_per_class = list()
 
 	for i in range(10):
-		get_prob(i, singular_image, digit_matrices, 1)
+		probability_per_class.append(get_prob(i, singular_image, digit_matrices, 1))
+	
+	max_value = max(probability_per_class)
+	max_index = probability_per_class.index(max_value) 
+
+	print max_index
 
 
 
