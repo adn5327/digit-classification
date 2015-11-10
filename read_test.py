@@ -3,8 +3,16 @@ import read_training as rtrain
 import numpy as np
 import math
 
+correct_count = 0
+correct_per_class = list()
+num_per_class = list()
+
 def test(training_data = None):
-	
+
+	for i in range(10):
+		correct_per_class.append(0)
+		num_per_class.append(0)	
+
 	labels = open('digitdata/testlabels','r')
 	representation = labels.readlines()
 	images = open('digitdata/testimages', 'r')
@@ -12,9 +20,11 @@ def test(training_data = None):
 	count = 0
 	for line in representation:
 		generate_probability(line, training_data, images)
-		if count == 30:
-			quit()
 		count+=1
+
+	print (1.0 * correct_count) / count
+	for i in range(len(num_per_class)):
+		print (i, (1.0 * correct_per_class[i]) / (num_per_class[i]) , correct_per_class[i], num_per_class[i])
 def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 
 	training_matrix_obj = digit_matrices.frequencies[digit_class]
@@ -34,7 +44,7 @@ def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 					# print stry
 					cur_total += math.log(idx_prob)
 					break
-	cur_total *= -1
+	# cur_total *= -1
 	return cur_total
 
 
@@ -62,7 +72,15 @@ def generate_probability(line, digit_matrices, images):
 	max_value = max(probability_per_class)
 	max_index = probability_per_class.index(max_value) 
 
-	print max_index
+	digit_class = int(line)
+	global num_per_class
+	global correct_count
+	global correct_per_class
+	num_per_class[digit_class] +=1
+	if max_index == digit_class:
+		correct_count+=1
+		correct_per_class[max_index]+=1
+	# print (max_index, digit_class)
 
 
 
