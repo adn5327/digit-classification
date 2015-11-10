@@ -44,6 +44,7 @@ def populate_category(line, digit_matrices, images):
 			else:
 				look_at_this[0][i][j] +=1
 
+
 	
 
 
