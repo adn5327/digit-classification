@@ -6,6 +6,7 @@ import math
 correct_count = 0
 correct_per_class = list()
 num_per_class = list()
+confusion_matrix = np.zeros((2,2))
 
 def test(training_data = None):
 
@@ -27,6 +28,21 @@ def test(training_data = None):
 	print (1.0 * correct_count) / count
 	for i in range(len(num_per_class)):
 		print (i, (1.0 * correct_per_class[i]) / (num_per_class[i]) , correct_per_class[i], num_per_class[i])
+
+	for i in range(len(confusion_matrix)):
+		cat_sum = 0
+		for j in range(len(confusion_matrix[0])):
+			cat_sum += confusion_matrix[i][j]
+		for j in range(len(confusion_matrix[0])):
+			confusion_matrix[i][j] = confusion_matrix[i][j] / cat_sum * 1.0
+	string = '\t0\t1\n'
+	for i in range(2):
+		string += str(i) + ':\t'
+		for j in range(2):
+			string += '{0:.2%}\t'.format(confusion_matrix[i][j])
+		string += '\n'
+	print string
+
 def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 
 	training_matrix_obj = digit_matrices.frequencies[digit_class]
@@ -36,7 +52,7 @@ def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 	pclass = (count_for_class *1.0)/ digit_matrices.count
 	denominator = (smooth_factor * len(tr_mtrx) + count_for_class) * 1.0
 	cur_total = math.log(pclass)
-	for i in range(69):
+	for i in range(70):
 		for j in range(60):
 			for length in range(len(tr_mtrx)):
 				if testing_matrix[i][j] == length:
@@ -55,7 +71,7 @@ def generate_probability(line, digit_matrices, images):
 
 	str = ''
 	singular_image = list()
-	for i in range(69):
+	for i in range(70):
 		cur_line = images.readline()
 		str += cur_line
 		singular_image.append(list())
@@ -76,6 +92,8 @@ def generate_probability(line, digit_matrices, images):
 	global num_per_class
 	global correct_count
 	global correct_per_class
+	global confusion_matrix
+	confusion_matrix[digit_class][max_index] += 1
 	num_per_class[digit_class] +=1
 	if max_index == digit_class:
 		correct_count+=1

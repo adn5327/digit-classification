@@ -34,7 +34,7 @@ def populate_category(line, digit_matrices, images):
 	digit_class = int(line)
 	look_at_this = digit_matrices.frequencies[digit_class].matrices
 	digit_matrices.frequencies[digit_class].count+=1
-	for i in range(69):
+	for i in range(70):
 		cur_line = images.readline()
 		for j in range(60):
 			if cur_line[j] != ' ':

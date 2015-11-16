@@ -15,7 +15,7 @@ class hold_matrix(object):
 
 
 	def create_matrix(self):
-		matrix = np.zeros((69,60), dtype=np.int)
+		matrix = np.zeros((70,60), dtype=np.int)
 		return matrix
 
 	def smooth_numerators(self):
