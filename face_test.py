@@ -28,6 +28,7 @@ def test(training_data = None):
 	print (1.0 * correct_count) / count
 	for i in range(len(num_per_class)):
 		print (i, (1.0 * correct_per_class[i]) / (num_per_class[i]) , correct_per_class[i], num_per_class[i])
+
 	for i in range(len(confusion_matrix)):
 		cat_sum = 0
 		for j in range(len(confusion_matrix[0])):
@@ -37,7 +38,7 @@ def test(training_data = None):
 	string = '\t0\t1\n'
 	for i in range(2):
 		string += str(i) + ':\t'
-		for j in range(10):
+		for j in range(2):
 			string += '{0:.2%}\t'.format(confusion_matrix[i][j])
 		string += '\n'
 	print string
@@ -91,6 +92,8 @@ def generate_probability(line, digit_matrices, images):
 	global num_per_class
 	global correct_count
 	global correct_per_class
+	global confusion_matrix
+	confusion_matrix[digit_class][max_index] += 1
 	num_per_class[digit_class] +=1
 	if max_index == digit_class:
 		correct_count+=1
