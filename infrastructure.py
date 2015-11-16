@@ -1,5 +1,5 @@
 import numpy as np
-
+import copy
 '''
 	This class is a collection of row-accessed matricies 
 		of size: 28 x 28
@@ -23,9 +23,24 @@ class hold_matrix(object):
 			for element in matrix:
 				element+=1
 
+	def set_low_m(self, matrix):
+		self.low_matrix = copy.deepcopy(matrix)
+
+	def set_high_m(self, matrix):
+		self.high_matrix = copy.deepcopy(matrix)
+
+	def set_high(self, high):
+		self.high = high
+
+	def set_low(self, low):
+		self.low = low
 
 	def __init__(self):
 		self.count = 0
+		self.low = 100
+		self.high = -1000
+		self.low_matrix = list()
+		self.high_matrix = list()
 		self.matrices = list()
 		self.matrices.append(self.create_matrix())
 		self.matrices.append(self.create_matrix())

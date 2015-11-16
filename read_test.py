@@ -3,10 +3,45 @@ import read_training as rtrain
 import numpy as np
 import math
 import time
+import copy
 correct_count = 0
 correct_per_class = list()
 num_per_class = list()
 confusion_matrix = np.zeros((10,10))
+low_matrix_list = list()
+low_prob_list = list()
+high_prob_list = list()
+high_matrix_list = list()
+
+def printHighLow(digit_class):
+	print 'Category:\t{}\n'.format(digit_class)
+	# print '\nLow Frequency:\t{}'.format(training_data.frequencies[digit_class].low)
+	print '\nLow Frequency:\t{}'.format(low_prob_list[digit_class])
+	if len(low_matrix_list[digit_class]) != 28:
+		print 'None\n'
+	else:
+		numstring = ''
+		for i in range(28):
+			numstring += '\n'
+			for j in range(28):
+				# numstring += str(training_data.frequencies[digit_class].low_matrix[i][j])
+				numstring += str(low_matrix_list[digit_class][i][j])
+		print numstring
+
+	# print '\nHigh Frequency:\t{}'.format(training_data.frequencies[digit_class].high)
+	print '\nHigh Frequency:\t{}'.format(high_prob_list[digit_class])
+	if len(high_matrix_list[digit_class]) != 28:
+		print 'None\n'
+	else:
+	# print training_data.frequencies[digit_class].high
+		numstring = ''
+		for i in range(28):
+			numstring += '\n'
+			for j in range(28):
+				# numstring += str(training_data.frequencies[digit_class].high_matrix[i][j])
+				numstring += str(high_matrix_list[digit_class][i][j])
+		print numstring
+
 
 '''
 	@Param	training_data	Digit-list object that holds frequencies
@@ -19,6 +54,10 @@ def test(training_data = None):
 	for i in range(10):
 		correct_per_class.append(0)
 		num_per_class.append(0)	
+		low_prob_list.append(1000)
+		high_prob_list.append(-1000)
+		low_matrix_list.append(list())
+		high_matrix_list.append(list())
 
 	labels = open('digitdata/testlabels','r')
 	representation = labels.readlines()
@@ -49,6 +88,10 @@ def test(training_data = None):
 			string += '{0:.2%}\t'.format(confusion_matrix[i][j])
 		string += '\n'
 	print string
+
+	for i in range(10):
+		printHighLow(i)
+
 '''
 	@Param	digit_class 	integer index of the category we want
 			testing_matrix	28x28 matrix representation of an image
@@ -79,6 +122,28 @@ def get_prob(digit_class, testing_matrix , digit_matrices, smooth_factor):
 					cur_total += math.log(idx_prob)
 					break
 	# cur_total *= -1
+	global high_prob_list
+	global low_prob_list
+	global high_matrix_list
+	global low_matrix_list
+	# print 'cur: {} high: {} low: {}'.format(cur_total, high_prob_list[digit_class], low_prob_list[digit_class])
+	if cur_total > high_prob_list[digit_class]:
+		# print 'cur: {} high: {}'.format(cur_total, high_prob_list[digit_class])
+		high_prob_list[digit_class] = cur_total
+		high_matrix_list[digit_class] = copy.deepcopy(testing_matrix)
+	if cur_total < low_prob_list[digit_class]:
+		low_prob_list[digit_class] = cur_total
+		low_matrix_list[digit_class] = copy.deepcopy(testing_matrix)
+
+	# if cur_total > digit_matrices.frequencies[digit_class].high:
+	# 	# print("!")
+	# 	digit_matrices.frequencies[digit_class].set_high(cur_total)
+	# 	digit_matrices.frequencies[digit_class].set_high_m(testing_matrix)
+
+	# if cur_total < digit_matrices.frequencies[digit_class].low:
+	# 	# print("?")
+	# 	digit_matrices.frequencies[digit_class].set_low(cur_total)
+	# 	digit_matrices.frequencies[digit_class].set_low_m(testing_matrix)
 	return cur_total
 
 '''
@@ -125,5 +190,5 @@ def generate_probability(line, digit_matrices, images):
 
 if __name__ == '__main__':
 	start = time.clock()
-	test(rtrain.train())
+	test(rtrain.train(0))
 	print time.clock() - start
