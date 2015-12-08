@@ -5,6 +5,8 @@ import random
 import plotly.plotly as py
 import plotly.graph_objs as go
 
+__author__ = 'Jakub Klapacz <jklapac2@illinois.edu> and Abhishek Nigam <adnigam2@illinois.edu>'
+
 class SVC(object):
     """Implements a binary classifier SVM using SGD.
 
@@ -30,10 +32,6 @@ class SVC(object):
 
     def __init__(self, category, reg=1):
         self.reg = reg
-
-        # It's just my habit to suffix variables with '_' if they're
-        # instantiated in the "fitting" stage of the algorithm.
-        # This is how the scikit-learn maintainers style their code.
         self.weights_ = None
         self.bias_ = 0
         self.n_features_ = None
@@ -45,13 +43,13 @@ class SVC(object):
             # quit()
             return result
 
-    def fit(self, X, y, validation_size=0.25, n_epochs=50, n_steps=100):
+    def fit(self, X, y, other_svm = None ,validation_size=0.25, n_epochs=50, n_steps=100):
         
 
         """Trains the support vector machine
         """
         X, y = check_X_y(X, y)
-
+        backup_X, backup_y = X, y
         # Need to make sure y labels are correct
         self.classes_ = np.unique(y)
         # assert len(self.classes_) == 2
@@ -105,7 +103,15 @@ class SVC(object):
                     cur_X = val_X[val_i]
                     cur_y = val_y[val_i]
                     # print cur_X
-                    if (self.predict(cur_X) == cur_y):
+                     
+
+
+
+                    if(self.predict(cur_X) > 0):
+                        prediction = 1
+                    else:
+                        prediction = -1
+                    if (prediction == cur_y):
                         correct += 1
                 accuracy = (correct * 1.0) / (total * 1.0)
                 if(i % 10 == 0):
@@ -122,24 +128,6 @@ class SVC(object):
         # print x.shape
         
         return (x, y)
-
-        # data = [
-        #     go.Scatter(
-        #         x = x[0],
-        #         y = y[0]
-        #         )
-        # ]
-        # py.image.save_as({'data': data}, '111.png')
-        
-        # return validation_accuracy
-
-        
-        
-        # TODO: Write the gradient step update for the SVM
-        # It might be helpful to return the prediction accuracy of
-        # the SVM on some evaluation set.
-        #
-        # See sklearn.metrics.accuracy_score
 
     def predict(self, X):
         """Returns the predictions (-1 or 1) on the feature set X.
